@@ -31,6 +31,7 @@ dependencies {
     implementation("com.fasterxml:jackson-xml-databind:0.6.2")
     implementation("commons-codec:commons-codec:1.15")
     implementation("commons-io:commons-io:2.11.0")
+    implementation("cn.dev33:sa-token-spring-boot-starter:1.28.0")
     implementation(project("modules:DDStream-common"))
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.2")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.2")
