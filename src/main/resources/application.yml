@@ -2,8 +2,7 @@ server:
   port: 7000
 spring:
   application:
-    name: ${DDSTREAM_CLIENT_APPLICATION_NAME:DDStream-server}
-  #????
+    name: ${DDSTREAM_SERVER_APPLICATION_NAME:DDStream-server}
   cloud:
     consul:
       port: 8500
@@ -21,8 +20,8 @@ spring:
       path: /h2
   sql:
     init:
-#      mode: always
-#      data-locations: classpath:sql/init.sql
+      mode: always
+      data-locations: classpath:sql/init.sql
 management:
   endpoints:
     web:
@@ -31,3 +30,10 @@ management:
     endpoint:
       health:
         show-details: always
+feign:
+  httpclient:
+    disable-ssl-validation: true
+dd-stream:
+  client:
+    application:
+      name: ${DDSTREAM_CLIENT_APPLICATION_NAME:DDStream-client}
