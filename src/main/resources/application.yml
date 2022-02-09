@@ -30,9 +30,6 @@ management:
     endpoint:
       health:
         show-details: always
-feign:
-  httpclient:
-    disable-ssl-validation: true
 dd-stream:
   client:
     application:
