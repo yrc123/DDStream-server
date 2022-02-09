@@ -1,6 +1,6 @@
 package com.yrc.ddstreamserver.service.role
 
 import com.baomidou.mybatisplus.extension.service.IService
-import com.yrc.ddstreamserver.pojo.role.RoleDto
+import com.yrc.ddstreamserver.pojo.role.RoleEntity
 
-interface RoleService : IService<RoleDto>
+interface RoleService : IService<RoleEntity>

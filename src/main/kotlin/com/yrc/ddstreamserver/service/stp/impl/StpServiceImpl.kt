@@ -1,8 +1,8 @@
 package com.yrc.ddstreamserver.service.stp.impl
 
 import cn.dev33.satoken.stp.StpInterface
-import com.yrc.ddstreamserver.pojo.rolepermission.RolePermissionDto
-import com.yrc.ddstreamserver.pojo.userrole.UserRoleDto
+import com.yrc.ddstreamserver.pojo.rolepermission.RolePermissionEntity
+import com.yrc.ddstreamserver.pojo.userrole.UserRoleEntity
 import com.yrc.ddstreamserver.service.permission.PermissionService
 import com.yrc.ddstreamserver.service.role.RoleService
 import com.yrc.ddstreamserver.service.rolepermission.RolePermissionService
@@ -40,13 +40,13 @@ class StpServiceImpl(
     }
     private fun getRoleIdListByUserIdList(userIds: List<String>): List<String> {
         return userRoleService.ktQuery()
-            .`in`(UserRoleDto::userId, userIds.toSet())
+            .`in`(UserRoleEntity::userId, userIds.toSet())
             .list()
             .mapNotNull { it.roleId }
     }
     private fun getPermissionIdListByRoleIdList(roleIds: List<String>): List<String>{
         return rolePermissionService.ktQuery()
-            .`in`(RolePermissionDto::roleId, roleIds.toSet())
+            .`in`(RolePermissionEntity::roleId, roleIds.toSet())
             .list()
             .mapNotNull { it.permissionId }
     }

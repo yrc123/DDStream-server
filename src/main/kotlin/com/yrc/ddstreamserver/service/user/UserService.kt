@@ -1,6 +1,6 @@
 package com.yrc.ddstreamserver.service.user
 
 import com.baomidou.mybatisplus.extension.service.IService
-import com.yrc.ddstreamserver.pojo.user.UserDto
+import com.yrc.ddstreamserver.pojo.user.UserEntity
 
-interface UserService : IService<UserDto>
+interface UserService : IService<UserEntity>
