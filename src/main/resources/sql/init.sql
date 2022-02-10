@@ -22,7 +22,7 @@ create table if not exists KEY_VALUE_STORE
 
 create table if not exists PERMISSION
 (
-    id              UUID        not null,
+    id              VARCHAR(64)        not null,
     permission_name VARCHAR(64) not null,
     constraint PERMISSION_PK
         primary key (id)
@@ -33,7 +33,7 @@ create unique index if not exists PERMISSION_PERMISSION_NAME_UINDEX
 
 create table if not exists ROLE
 (
-    id        UUID not null,
+    id        VARCHAR(64) not null,
     role_name VARCHAR(64) not null,
     constraint ROLE_PK
         primary key (id)
@@ -44,7 +44,7 @@ create unique index if not exists ROLE_ROLE_NAME_UINDEX
 
 create table if not exists USER
 (
-    id       UUID         not null,
+    id       VARCHAR(64)         not null,
     username VARCHAR(64)  not null,
     password VARCHAR(128) not null,
     nickname VARCHAR(128) not null,
@@ -59,9 +59,9 @@ create unique index if not exists USER_USERNAME_UINDEX
 
 create table if not exists USER_ROLE
 (
-    id      UUID not null,
-    user_id UUID not null,
-    role_id UUID not null,
+    id      VARCHAR(64) not null,
+    user_id VARCHAR(64) not null,
+    role_id VARCHAR(64) not null,
     constraint USER_ROLE_PK
         primary key (id),
     constraint USER_ROLE_ROLE_ID_FK
@@ -77,9 +77,9 @@ create unique index if not exists USER_ROLE_ROLE_ID_USER_ID_UINDEX
 
 create table if not exists ROLE_PERMISSION
 (
-    id            UUID not null,
-    role_id       UUID not null,
-    permission_id UUID not null,
+    id            VARCHAR(64) not null,
+    role_id       VARCHAR(64) not null,
+    permission_id VARCHAR(64) not null,
     constraint ROLE_PERMISSION_PK
         primary key (id),
     constraint ROLE_PERMISSION_PERMISSION_ID_FK

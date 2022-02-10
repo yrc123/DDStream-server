@@ -10,8 +10,8 @@ import org.springframework.scheduling.annotation.EnableScheduling
 @EnableFeignClients
 @EnableScheduling
 @EnableCaching
-class DdStreamServerApplication
+class DDStreamServerApplication
 
 fun main(args: Array<String>) {
-    runApplication<DdStreamServerApplication>(*args)
+    runApplication<DDStreamServerApplication>(*args)
 }

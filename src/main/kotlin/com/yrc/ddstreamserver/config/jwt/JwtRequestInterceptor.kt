@@ -12,6 +12,9 @@ class JwtRequestInterceptor(
     private val jwtService: JwtService,
     @Value("\${spring.application.name}") private val issuer: String,
     ) : RequestInterceptor{
+    companion object {
+        const val JWS_KEY = "jws"
+    }
     override fun apply(request: RequestTemplate) {
         val time = Date(System.currentTimeMillis())
         val data: String = when (request.method()) {
@@ -26,6 +29,6 @@ class JwtRequestInterceptor(
             }
         }
         val jws = jwtService.encode(data, 120 * 1000, issuer, time)
-        request.header("jws", jws)
+        request.header(JWS_KEY, jws)
     }
 }
