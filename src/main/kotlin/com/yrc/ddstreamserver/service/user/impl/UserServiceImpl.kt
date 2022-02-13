@@ -7,4 +7,9 @@ import com.yrc.ddstreamserver.service.user.UserService
 import org.springframework.stereotype.Service
 
 @Service
-class UserServiceImpl : UserService, ServiceImpl<UserMapper, UserEntity>()
+class UserServiceImpl : UserService, ServiceImpl<UserMapper, UserEntity>() {
+    override fun listByUsernames(usernames: List<String>): List<UserEntity> {
+        val wrapper = ktQuery().`in`(UserEntity::username, usernames)
+        return this.list(wrapper)
+    }
+}

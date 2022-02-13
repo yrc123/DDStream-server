@@ -26,7 +26,7 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     implementation("com.baomidou:mybatis-plus-boot-starter:3.5.0")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.valiktor:valiktor-core:0.12.0")
+    implementation("org.valiktor:WebMvcConfig-core:0.12.0")
     implementation("io.jsonwebtoken:jjwt-api:0.11.2")
     implementation("com.fasterxml:jackson-xml-databind:0.6.2")
     implementation("commons-codec:commons-codec:1.15")

@@ -1,13 +1,11 @@
 package com.yrc.ddstreamclient.controller.ffmpeg
 
-import com.baomidou.mybatisplus.core.metadata.IPage
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page
 import com.yrc.common.pojo.common.ResponseDto
 import com.yrc.common.pojo.ffmpeg.FFmpegConfigDto
 import com.yrc.common.pojo.ffmpeg.FFmpegProcessDto
 import org.springframework.web.bind.annotation.*
 
-//@RequestMapping("/api/client")
 interface FFmpegService {
 
     @PostMapping("/api/client/ffmpeg/name/{name}:start")
@@ -23,7 +21,7 @@ interface FFmpegService {
     fun deleteProcess(@PathVariable("id") id: String): ResponseDto<String>
 
     @PostMapping("/api/client/ffmpeg")
-    fun listProcesses(@RequestBody page: Page<FFmpegProcessDto>): ResponseDto<IPage<FFmpegProcessDto>>
+    fun listProcesses(@RequestBody page: Page<FFmpegProcessDto>): ResponseDto<Page<FFmpegProcessDto>>
 
     @GetMapping("/api/client/ffmpeg/{id}")
     fun getFFmpegById(@PathVariable("id") id: String): ResponseDto<FFmpegProcessDto>

@@ -22,7 +22,7 @@ class JwtRequestInterceptor(
                 request.path()
             }
             "POST" -> {
-                request.body().toString()
+                String(request.body())
             }
             else -> {
                 TODO("抛出异常")

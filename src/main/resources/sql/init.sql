@@ -20,21 +20,19 @@ create table if not exists KEY_VALUE_STORE
         primary key (key)
 );
 
-create table if not exists PERMISSION
-(
-    id              VARCHAR(64)        not null,
-    permission_name VARCHAR(64) not null,
-    constraint PERMISSION_PK
-        primary key (id)
-);
-
-create unique index if not exists PERMISSION_PERMISSION_NAME_UINDEX
-    on PERMISSION (permission_name);
+-- create table if not exists PERMISSION
+-- (
+--     id              VARCHAR(64)        not null,
+--     constraint PERMISSION_PK
+--         primary key (id)
+-- );
+--
+-- create unique index if not exists PERMISSION_PERMISSION_NAME_UINDEX
+--     on PERMISSION (permission_name);
 
 create table if not exists ROLE
 (
     id        VARCHAR(64) not null,
-    role_name VARCHAR(64) not null,
     constraint ROLE_PK
         primary key (id)
 );
