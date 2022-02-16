@@ -37,8 +37,8 @@ create table if not exists ROLE
         primary key (id)
 );
 
-create unique index if not exists ROLE_ROLE_NAME_UINDEX
-    on ROLE (role_name);
+-- create unique index if not exists ROLE_ROLE_NAME_UINDEX
+--     on ROLE (role_name);
 
 create table if not exists USER
 (
@@ -80,9 +80,9 @@ create table if not exists ROLE_PERMISSION
     permission_id VARCHAR(64) not null,
     constraint ROLE_PERMISSION_PK
         primary key (id),
-    constraint ROLE_PERMISSION_PERMISSION_ID_FK
-        foreign key (permission_id) references PERMISSION
-            on update cascade on delete cascade,
+--     constraint ROLE_PERMISSION_PERMISSION_ID_FK
+--         foreign key (permission_id) references PERMISSION
+--             on update cascade on delete cascade,
     constraint ROLE_PERMISSION_ROLE_ID_FK
         foreign key (role_id) references ROLE
             on update cascade on delete cascade

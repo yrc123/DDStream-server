@@ -5,6 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableId
 import com.baomidou.mybatisplus.annotation.TableName
 
 @TableName(value = "ROLE")
-enum class RoleEntity(
+class RoleEntity(
     @TableId(type = IdType.INPUT) var id: String? = null,
 )

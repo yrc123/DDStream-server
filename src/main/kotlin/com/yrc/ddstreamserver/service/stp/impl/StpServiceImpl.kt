@@ -3,7 +3,6 @@ package com.yrc.ddstreamserver.service.stp.impl
 import cn.dev33.satoken.stp.StpInterface
 import com.yrc.ddstreamserver.pojo.rolepermission.RolePermissionEntity
 import com.yrc.ddstreamserver.pojo.userrole.UserRoleEntity
-import com.yrc.ddstreamserver.service.permission.PermissionService
 import com.yrc.ddstreamserver.service.role.RoleService
 import com.yrc.ddstreamserver.service.rolepermission.RolePermissionService
 import com.yrc.ddstreamserver.service.userrole.UserRoleService
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service
 
 @Service
 class StpServiceImpl(
-    val permissionService: PermissionService,
     val roleService: RoleService,
     val rolePermissionService: RolePermissionService,
     val userRoleService: UserRoleService,
@@ -19,10 +17,7 @@ class StpServiceImpl(
     override fun getPermissionList(loginId: Any?, loginType: String?): MutableList<String> {
         if (loginId is String) {
             val roleIds = getRoleIdListByUserIdList(listOf(loginId))
-            val permissionIds = getPermissionIdListByRoleIdList(roleIds)
-            return permissionService.listByIds(permissionIds)
-                .mapNotNull { it.permissionName }
-                .toMutableList()
+            return getPermissionIdListByRoleIdList(roleIds).toMutableList()
         } else {
             TODO("抛出异常")
         }
@@ -32,7 +27,7 @@ class StpServiceImpl(
         if (loginId is String) {
             val roleIds = getRoleIdListByUserIdList(listOf(loginId))
             return roleService.listByIds(roleIds)
-                .mapNotNull { it.roleName }
+                .mapNotNull { it.id }
                 .toMutableList()
         } else {
             TODO("抛出异常")
@@ -49,5 +44,8 @@ class StpServiceImpl(
             .`in`(RolePermissionEntity::roleId, roleIds.toSet())
             .list()
             .mapNotNull { it.permissionId }
+            .map { it.value }
+            .toSet()
+            .toList()
     }
 }
