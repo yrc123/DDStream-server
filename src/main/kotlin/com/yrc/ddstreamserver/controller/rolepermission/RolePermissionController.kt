@@ -7,14 +7,10 @@ import com.yrc.common.utils.ResponseUtils
 import com.yrc.ddstreamserver.controller.common.ControllerUtils
 import com.yrc.ddstreamserver.pojo.permission.PermissionName.ROLE_PERMISSION_READ
 import com.yrc.ddstreamserver.pojo.permission.PermissionName.ROLE_PERMISSION_WRITE
-import com.yrc.ddstreamserver.pojo.role.RoleDto
 import com.yrc.ddstreamserver.pojo.rolepermission.RolePermissionDto
 import com.yrc.ddstreamserver.pojo.rolepermission.RolePermissionEntity
 import com.yrc.ddstreamserver.service.rolepermission.RolePermissionService
 import org.springframework.web.bind.annotation.*
-import org.valiktor.functions.hasSize
-import org.valiktor.functions.isNotNull
-import org.valiktor.validate
 
 @RestController
 @RequestMapping("/api/v1")
@@ -40,7 +36,7 @@ class RolePermissionController(
                    @RequestBody rolePermissionDto: RolePermissionDto
     ): ResponseDto<RolePermissionDto> {
         ControllerUtils.checkPathVariable(roleId, rolePermissionDto.roleId)
-        validator.invoke(rolePermissionDto)
+        RolePermissionDto.commonValidator.invoke(rolePermissionDto)
         val wrapper = KtQueryWrapper(RolePermissionEntity::class.java)
             .`in`(RolePermissionEntity::roleId, listOf(roleId))
         val permissionSetInDb = rolePermissionService.list(wrapper)
@@ -67,18 +63,9 @@ class RolePermissionController(
             .`in`(RolePermissionEntity::permissionId, deleteEntityList)
         rolePermissionService.remove(deleteWrapper)
 
-
         val permissionList = rolePermissionService.list(wrapper)
             .mapNotNull { it.permissionId }
         return ResponseUtils
             .successResponse(RolePermissionDto(roleId, permissionList))
-    }
-
-    private val  validator = {
-            rolePermissionDto: RolePermissionDto ->
-        validate(rolePermissionDto) {
-            validate(RolePermissionDto::roleId).hasSize(1, RoleDto.ID_MAX)
-            validate(RolePermissionDto::permissionList).isNotNull()
-        }
     }
 }

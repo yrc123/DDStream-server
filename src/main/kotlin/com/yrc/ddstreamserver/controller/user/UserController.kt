@@ -2,6 +2,7 @@ package com.yrc.ddstreamserver.controller.user
 
 import cn.dev33.satoken.annotation.SaCheckLogin
 import cn.dev33.satoken.annotation.SaCheckPermission
+import cn.dev33.satoken.secure.SaSecureUtil
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO
 import com.yrc.common.pojo.common.ResponseDto
 import com.yrc.common.utils.PageUtils.converterResultPage
@@ -17,9 +18,6 @@ import com.yrc.ddstreamserver.service.user.UserService
 import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.web.bind.annotation.*
-import org.valiktor.functions.hasSize
-import org.valiktor.functions.isEmail
-import org.valiktor.validate
 
 @RestController
 @RequestMapping("/api/v1")
@@ -61,25 +59,18 @@ class UserController(
     @SaCheckPermission(USER_WRITE)
     @PatchMapping("/users/{userId}")
     fun updateUser(@PathVariable userId: String, @RequestBody userDto: UserDto): ResponseDto<UserDto> {
-        validate(userDto) {
-            validate(UserDto::username)
-                .hasSize(UserDto.USERNAME_MIN, UserDto.USERNAME_MAX)
-            validate(UserDto::password)
-                .hasSize(0, UserDto.PASSWORD_MAX)
-            validate(UserDto::nickname)
-                .hasSize(UserDto.NICKNAME_MIN, UserDto.NICKNAME_MAX)
-            if (userDto.email != null) {
-                validate(UserDto::email).isEmail()
-            }
-        }
+        UserDto.updateValidator.invoke(userDto)
         ControllerUtils.checkPathVariable(userId, userDto.id)
+        userDto.password = SaSecureUtil.md5BySalt(userDto.password, salt)
         val userEntities = userService.listByIds(listOf(userDto.id))
         if (userEntities.isNotEmpty()) {
-            val entityInDb = userEntities.first()
-            BeanUtils.copyProperties(userDto, entityInDb)
-            userService.updateById(entityInDb)
-            val resultDto = UserDto()
-            BeanUtils.copyProperties(entityInDb, resultDto)
+            val resultDto = ControllerUtils.updateAndReturnDto(
+                userService,
+                userDto,
+                userEntities.first(),
+                UserDto::class
+            )
+            resultDto.password = null
             return ResponseUtils.successResponse(resultDto)
         } else {
             throw EnumServerException.NOT_FOUND.build()

@@ -13,8 +13,6 @@ import com.yrc.ddstreamserver.pojo.role.RoleDto
 import com.yrc.ddstreamserver.pojo.role.RoleEntity
 import com.yrc.ddstreamserver.service.role.RoleService
 import org.springframework.web.bind.annotation.*
-import org.valiktor.functions.hasSize
-import org.valiktor.validate
 
 @RestController
 @RequestMapping("/api/v1")
@@ -36,7 +34,7 @@ class RoleController(
     fun insertRole(@PathVariable roleName: String,
                    @RequestBody roleDto: RoleDto): ResponseDto<RoleDto> {
         ControllerUtils.checkPathVariable(roleName, roleDto.id)
-        validator.invoke(roleDto)
+        RoleDto.commonValidator.invoke(roleDto)
         val resultDto = ControllerUtils.saveAndReturnDto(
             roleService,
             roleDto,
@@ -45,20 +43,15 @@ class RoleController(
         )
         return ResponseUtils.successResponse(resultDto)
     }
+
     @SaCheckPermission(ROLE_WRITE)
     @DeleteMapping("/roles/{roleName}")
     fun deleteRole(@PathVariable roleName: String,
         @RequestBody roleDto: RoleDto): ResponseDto<String> {
         ControllerUtils.checkPathVariable(roleName, roleDto.id)
-        validator.invoke(roleDto)
+        RoleDto.commonValidator.invoke(roleDto)
         roleService.removeById(roleName)
         return ResponseUtils.successStringResponse()
-    }
-
-    private val  validator = {
-        roleDto: RoleDto -> validate(roleDto) {
-            validate(RoleDto::id).hasSize(1, RoleDto.ID_MAX)
-        }
     }
 
 }

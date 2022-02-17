@@ -20,6 +20,7 @@ object ControllerUtils{
         }
         return true
     }
+
     fun<U : Any, V : Any> saveAndReturnDto(
         service: IService<U>,
         saveDto: V,
@@ -31,6 +32,19 @@ object ControllerUtils{
         service.save(saveEntity)
         val resultDto = dtoClass.createInstance()
         BeanUtils.copyProperties(saveEntity, resultDto)
+        return resultDto
+    }
+
+    fun<U : Any, V : Any> updateAndReturnDto(
+        service: IService<U>,
+        saveDto: V,
+        entityInDb: U,
+        dtoClass: KClass<V>): V{
+
+        BeanUtils.copyProperties(saveDto, entityInDb)
+        service.updateById(entityInDb)
+        val resultDto = dtoClass.createInstance()
+        BeanUtils.copyProperties(saveDto, resultDto)
         return resultDto
     }
 }
