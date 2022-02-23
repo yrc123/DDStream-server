@@ -16,12 +16,16 @@ abstract class AbstractFeignClientFactory<T : Any>(
 ) {
     @Resource
     lateinit var jwtRequestInterceptor: JwtRequestInterceptor
+
     @Resource
     lateinit var clientService: ClientService
+
     @Resource
     lateinit var springEncoder: SpringEncoder
+
     @Resource
     lateinit var springDecoder: SpringDecoder
+
     @Resource(name = "trustAllClient")
     lateinit var client: Client
 

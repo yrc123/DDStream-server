@@ -5,5 +5,5 @@ import com.yrc.ddstreamserver.pojo.ffmpeglink.FFmpegLinkEntity
 import org.apache.ibatis.annotations.Mapper
 
 @Mapper
-interface FFmpegLinkMapper : BaseMapper<FFmpegLinkEntity>{
+interface FFmpegLinkMapper : BaseMapper<FFmpegLinkEntity> {
 }

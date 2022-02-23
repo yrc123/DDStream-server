@@ -17,20 +17,22 @@ import java.security.spec.PKCS8EncodedKeySpec
 @Configuration
 class JwtConfig {
     @Bean
-    fun getJwtService(jwtKeyProvider: JwtKeyProvider, objectMapper: ObjectMapper): JwtService{
+    fun getJwtService(jwtKeyProvider: JwtKeyProvider, objectMapper: ObjectMapper): JwtService {
         return JwtServiceImpl(jwtKeyProvider, objectMapper)
     }
+
     @Bean
-    fun getJwtKeyProvider(keyValueStoreService: KeyValueStoreService): JwtKeyProvider{
+    fun getJwtKeyProvider(keyValueStoreService: KeyValueStoreService): JwtKeyProvider {
         return EncodeJwtKeyProvider(keyValueStoreService)
     }
 
-    class EncodeJwtKeyProvider(private val keyValueStoreService: KeyValueStoreService) : JwtKeyProvider{
-         private val _privateKey: PrivateKey by lazy {
+    class EncodeJwtKeyProvider(private val keyValueStoreService: KeyValueStoreService) : JwtKeyProvider {
+        private val _privateKey: PrivateKey by lazy {
             if (keyValueStoreService
                     .contains(ApplicationConfiguration.JWT_ENCODE_PUBLIC_KEY.toString())
                 && keyValueStoreService
-                    .contains(ApplicationConfiguration.JWT_ENCODE_PRIVATE_KEY.toString())) {
+                    .contains(ApplicationConfiguration.JWT_ENCODE_PRIVATE_KEY.toString())
+            ) {
                 val encodePrivateKey = keyValueStoreService
                     .getById(ApplicationConfiguration.JWT_ENCODE_PRIVATE_KEY.toString())
                     .value

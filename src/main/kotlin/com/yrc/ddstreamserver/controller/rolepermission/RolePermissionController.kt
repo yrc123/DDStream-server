@@ -32,8 +32,9 @@ class RolePermissionController(
 
     @SaCheckPermission(ROLE_PERMISSION_WRITE)
     @PostMapping("/roles/{roleId}/permissions")
-    fun updatePermissions(@PathVariable roleId: String,
-                   @RequestBody rolePermissionDto: RolePermissionDto
+    fun updatePermissions(
+        @PathVariable roleId: String,
+        @RequestBody rolePermissionDto: RolePermissionDto
     ): ResponseDto<RolePermissionDto> {
         ControllerUtils.checkPathVariable(roleId, rolePermissionDto.roleId)
         RolePermissionDto.commonValidator.invoke(rolePermissionDto)

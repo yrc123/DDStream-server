@@ -20,17 +20,20 @@ import javax.net.ssl.SSLSocketFactory
 class FeginConfig {
     @Bean(name = ["trustAllClient"])
     fun getFeignClient(): Client {
-       return Client.Default(getSslContextFactory(), NoopHostnameVerifier())
+        return Client.Default(getSslContextFactory(), NoopHostnameVerifier())
     }
+
     fun getSslContextFactory(): SSLSocketFactory {
         val acceptingTrustStrategy: TrustStrategy = TrustStrategy { chain, authType -> true }
         val sslContext: SSLContext = SSLContexts.custom().loadTrustMaterial(null, acceptingTrustStrategy).build()
         return sslContext.socketFactory
     }
+
     @Bean
     fun getSpringEncoder(messageConverters: ObjectFactory<HttpMessageConverters>): SpringEncoder {
         return SpringEncoder(messageConverters)
     }
+
     @Bean
     fun getSpringDecoder(
         messageConverters: ObjectFactory<HttpMessageConverters>,

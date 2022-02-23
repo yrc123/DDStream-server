@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.IEnum
 import com.baomidou.mybatisplus.annotation.TableName
 
 @TableName(value = "PERMISSION")
-enum class PermissionEnumEntity(private val id: String) : IEnum<String>{
+enum class PermissionEnumEntity(private val id: String) : IEnum<String> {
     USER_READ(PermissionName.USER_READ),
     USER_WRITE(PermissionName.USER_WRITE),
     ROLE_READ(PermissionName.ROLE_READ),

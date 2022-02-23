@@ -7,4 +7,4 @@ import com.yrc.ddstreamserver.service.rolepermission.RolePermissionService
 import org.springframework.stereotype.Service
 
 @Service
-class RolePermissionImpl :RolePermissionService, ServiceImpl<RolePermissionMapper, RolePermissionEntity>()
+class RolePermissionImpl : RolePermissionService, ServiceImpl<RolePermissionMapper, RolePermissionEntity>()

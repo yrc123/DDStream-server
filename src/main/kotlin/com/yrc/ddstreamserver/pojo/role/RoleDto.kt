@@ -10,8 +10,7 @@ data class RoleDto(
     companion object {
         const val ID_MAX = 64
         const val ID_MIN = 1
-        val  commonValidator = {
-                roleDto: RoleDto ->
+        val commonValidator = { roleDto: RoleDto ->
             validate(roleDto) {
                 validate(RoleDto::id)
                     .isNotNull()

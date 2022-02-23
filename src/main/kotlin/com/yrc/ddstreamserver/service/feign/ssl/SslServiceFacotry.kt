@@ -5,5 +5,5 @@ import com.yrc.ddstreamserver.service.feign.AbstractFeignClientFactory
 import org.springframework.stereotype.Component
 
 @Component
-class SslServiceFacotry : AbstractFeignClientFactory<SslService>(SslService::class){
+class SslServiceFacotry : AbstractFeignClientFactory<SslService>(SslService::class) {
 }

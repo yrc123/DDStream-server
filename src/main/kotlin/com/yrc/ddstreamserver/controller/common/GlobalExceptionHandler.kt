@@ -16,20 +16,24 @@ import javax.annotation.Resource
 import javax.servlet.http.HttpServletResponse
 
 @RestControllerAdvice
-class GlobalExceptionHandler{
+class GlobalExceptionHandler {
     @Resource
     lateinit var mapper: ObjectMapper
 
     @ExceptionHandler(CommonException::class)
-    fun commonExceptionExceptionHandler(e: CommonException,
-                                   res: HttpServletResponse): ResponseDto<ResponseUtils.ExceptionData> {
+    fun commonExceptionExceptionHandler(
+        e: CommonException,
+        res: HttpServletResponse
+    ): ResponseDto<ResponseUtils.ExceptionData> {
         res.status = e.getCode()
         return ResponseUtils.exceptionResponse(e)
     }
 
     @ExceptionHandler(FeignException::class)
-    fun badRequestExceptionHandler(e: FeignException,
-                                   res: HttpServletResponse): ResponseDto<ResponseUtils.ExceptionData> {
+    fun badRequestExceptionHandler(
+        e: FeignException,
+        res: HttpServletResponse
+    ): ResponseDto<ResponseUtils.ExceptionData> {
         res.status = e.status()
         val byteArray = e.responseBody().orElseGet(null)?.array()
         val type = mapper.typeFactory
@@ -45,7 +49,8 @@ class GlobalExceptionHandler{
     @ExceptionHandler(DuplicateKeyException::class)
     fun duplicateKeyExceptionHandler(
         e: DuplicateKeyException,
-        res: HttpServletResponse): ResponseDto<ResponseUtils.ExceptionData>{
+        res: HttpServletResponse
+    ): ResponseDto<ResponseUtils.ExceptionData> {
         val commonException = EnumServerException.DUPLICATE_KEY.build()
         res.status = commonException.getCode()
         return ResponseUtils.exceptionResponse(commonException)
@@ -54,7 +59,8 @@ class GlobalExceptionHandler{
     @ExceptionHandler(ConstraintViolationException::class)
     fun constraintViolationExceptionHandler(
         e: ConstraintViolationException,
-        res: HttpServletResponse): ResponseDto<ResponseUtils.ExceptionData> {
+        res: HttpServletResponse
+    ): ResponseDto<ResponseUtils.ExceptionData> {
         val commonException = ValidateException(HttpStatus.SC_BAD_REQUEST, e)
         res.status = commonException.getCode()
         return ResponseUtils.exceptionResponse(commonException)

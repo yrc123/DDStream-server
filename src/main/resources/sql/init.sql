@@ -1,6 +1,6 @@
 create table if not exists CLIENT
 (
-    id       VARCHAR(64)         not null,
+    id       VARCHAR(64)  not null,
     hostname VARCHAR(32)  not null,
     port     INT          not null,
     nickname VARCHAR(128) not null,
@@ -14,7 +14,7 @@ create unique index if not exists HOSTNAME_PORT_UNIQUE
 
 create table if not exists KEY_VALUE_STORE
 (
-    key   VARCHAR(128) not null,
+    key VARCHAR (128) not null,
     value VARCHAR(512) not null,
     constraint KEY_VALUE_STORE_PK
         primary key (key)
@@ -32,7 +32,7 @@ create table if not exists KEY_VALUE_STORE
 
 create table if not exists ROLE
 (
-    id        VARCHAR(64) not null,
+    id VARCHAR(64) not null,
     constraint ROLE_PK
         primary key (id)
 );
@@ -42,7 +42,7 @@ create table if not exists ROLE
 
 create table if not exists USER
 (
-    id       VARCHAR(64)         not null,
+    id       VARCHAR(64)  not null,
     username VARCHAR(64)  not null,
     password VARCHAR(128) not null,
     nickname VARCHAR(128) not null,

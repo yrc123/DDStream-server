@@ -23,8 +23,7 @@ data class UserDto(
         const val NICKNAME_MAX = 128
         const val NICKNAME_MIN = 1
         const val EMAIL_MAX = 64
-        val commonValidator = {
-                userDto: UserDto ->
+        val commonValidator = { userDto: UserDto ->
             validate(userDto) {
                 validate(UserDto::username)
                     .isNotNull()
@@ -40,8 +39,7 @@ data class UserDto(
                 }
             }
         }
-        val updateValidator = {
-                userDto: UserDto ->
+        val updateValidator = { userDto: UserDto ->
             validate(userDto) {
                 validate(UserDto::id)
                     .isNull()

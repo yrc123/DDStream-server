@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName
 import com.yrc.ddstreamserver.pojo.permission.PermissionEnumEntity
 
 @TableName(value = "ROLE_PERMISSION")
-data class RolePermissionEntity (
+data class RolePermissionEntity(
     @TableId(type = IdType.ASSIGN_UUID) var id: String? = null,
     var roleId: String? = null,
     var permissionId: PermissionEnumEntity? = null,

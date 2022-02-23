@@ -42,7 +42,7 @@ class UserController(
 
     @SaCheckPermission(USER_READ)
     @GetMapping("/users")
-    fun listUsers(page: PageDTO<UserDto>): ResponseDto<PageDTO<UserDto>>{
+    fun listUsers(page: PageDTO<UserDto>): ResponseDto<PageDTO<UserDto>> {
         val searchPage = page.converterSearchPage<UserDto, UserEntity>()
         val resultPage = userService.page(searchPage)
             .converterResultPage(UserDto::class, ControllerUtils::defaultPageConverterMethod)

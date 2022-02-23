@@ -40,7 +40,7 @@ class AuthController(
         AuthDto.commonValidator.invoke(authDto)
         val userList = userService.listByUsernames(listOf(authDto.username!!))
         return if (userList.size != 1) {
-             ResponseUtils.failStringResponse("user does not exist")
+            ResponseUtils.failStringResponse("user does not exist")
         } else {
             userList.first().let {
                 val md5Password = SaSecureUtil.md5BySalt(authDto.password, salt)

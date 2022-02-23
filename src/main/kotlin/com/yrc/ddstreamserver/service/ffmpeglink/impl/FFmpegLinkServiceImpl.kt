@@ -11,11 +11,10 @@ import java.util.concurrent.Callable
 
 @Service
 class FFmpegLinkServiceImpl(
-    private val  ffmpegLinkMapper: FFmpegLinkMapper,
+    private val ffmpegLinkMapper: FFmpegLinkMapper,
     private val ffmpegServiceFactory: FFmpegServiceFactory,
     private val threadPoolTaskExecutor: ThreadPoolTaskExecutor
 ) : FFmpegLinkService {
-    @Suppress("UNREACHABLE_CODE")
     override fun startPush(ffmpegLinkEntity: FFmpegLinkEntity): Boolean {
         ffmpegLinkMapper.insert(ffmpegLinkEntity)
         threadPoolTaskExecutor.submit {

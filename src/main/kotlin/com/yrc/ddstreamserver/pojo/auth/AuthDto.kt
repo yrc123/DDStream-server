@@ -11,8 +11,7 @@ data class AuthDto(
     val rememberMe: Boolean? = null,
 ) {
     companion object {
-        val commonValidator = {
-                authDto: AuthDto ->
+        val commonValidator = { authDto: AuthDto ->
             validate(authDto) {
                 validate(AuthDto::username)
                     .isNotNull()

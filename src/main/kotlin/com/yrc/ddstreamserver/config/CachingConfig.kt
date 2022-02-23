@@ -12,12 +12,13 @@ import java.util.concurrent.TimeUnit
 @Configuration
 class CachingConfig {
     @Bean
-     fun cacheManager(): CacheManager {
+    fun cacheManager(): CacheManager {
         val cacheManager = CaffeineCacheManager()
         cacheManager.registerCustomCache("ffmpeg-service", buildCache(10 * 60))
         cacheManager.registerCustomCache("ffmpeg-ssl", buildCache(10 * 60))
         return cacheManager
     }
+
     private fun buildCache(ttl: Long, maxSize: Long = 100L): Cache<Any, Any> {
         return Caffeine.newBuilder()
             .expireAfterWrite(ttl, TimeUnit.SECONDS)

@@ -13,7 +13,7 @@ class StpServiceImpl(
     val roleService: RoleService,
     val rolePermissionService: RolePermissionService,
     val userRoleService: UserRoleService,
-) : StpInterface{
+) : StpInterface {
     override fun getPermissionList(loginId: Any?, loginType: String?): MutableList<String> {
         if (loginId is String) {
             val roleIds = getRoleIdListByUserIdList(listOf(loginId))
@@ -33,13 +33,15 @@ class StpServiceImpl(
             TODO("抛出异常")
         }
     }
+
     private fun getRoleIdListByUserIdList(userIds: List<String>): List<String> {
         return userRoleService.ktQuery()
             .`in`(UserRoleEntity::userId, userIds.toSet())
             .list()
             .mapNotNull { it.roleId }
     }
-    private fun getPermissionIdListByRoleIdList(roleIds: List<String>): List<String>{
+
+    private fun getPermissionIdListByRoleIdList(roleIds: List<String>): List<String> {
         return rolePermissionService.ktQuery()
             .`in`(RolePermissionEntity::roleId, roleIds.toSet())
             .list()

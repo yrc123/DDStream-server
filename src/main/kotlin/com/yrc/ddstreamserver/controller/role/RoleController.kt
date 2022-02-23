@@ -31,8 +31,10 @@ class RoleController(
 
     @SaCheckPermission(ROLE_WRITE)
     @PostMapping("/roles/{roleName}")
-    fun insertRole(@PathVariable roleName: String,
-                   @RequestBody roleDto: RoleDto): ResponseDto<RoleDto> {
+    fun insertRole(
+        @PathVariable roleName: String,
+        @RequestBody roleDto: RoleDto
+    ): ResponseDto<RoleDto> {
         ControllerUtils.checkPathVariable(roleName, roleDto.id)
         RoleDto.commonValidator.invoke(roleDto)
         val resultDto = ControllerUtils.saveAndReturnDto(
@@ -46,8 +48,10 @@ class RoleController(
 
     @SaCheckPermission(ROLE_WRITE)
     @DeleteMapping("/roles/{roleName}")
-    fun deleteRole(@PathVariable roleName: String,
-        @RequestBody roleDto: RoleDto): ResponseDto<String> {
+    fun deleteRole(
+        @PathVariable roleName: String,
+        @RequestBody roleDto: RoleDto
+    ): ResponseDto<String> {
         ControllerUtils.checkPathVariable(roleName, roleDto.id)
         RoleDto.commonValidator.invoke(roleDto)
         roleService.removeById(roleName)

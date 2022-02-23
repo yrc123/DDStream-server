@@ -11,8 +11,7 @@ data class RolePermissionDto(
     var permissionList: List<PermissionEnumEntity>? = null
 ) {
     companion object {
-        val commonValidator = {
-                rolePermissionDto: RolePermissionDto ->
+        val commonValidator = { rolePermissionDto: RolePermissionDto ->
             validate(rolePermissionDto) {
                 validate(RolePermissionDto::roleId)
                     .isNotNull()

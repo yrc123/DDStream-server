@@ -10,8 +10,7 @@ data class UserRoleDto(
     var roleList: List<String>? = null
 ) {
     companion object {
-        val commonValidator = {
-                userRoleDto: UserRoleDto ->
+        val commonValidator = { userRoleDto: UserRoleDto ->
             validate(userRoleDto) {
                 validate(UserRoleDto::userId)
                     .isNotNull()

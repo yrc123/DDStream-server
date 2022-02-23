@@ -11,10 +11,11 @@ import java.util.*
 class JwtRequestInterceptor(
     private val jwtService: JwtService,
     @Value("\${spring.application.name}") private val issuer: String,
-    ) : RequestInterceptor{
+) : RequestInterceptor {
     companion object {
         const val JWS_KEY = "jws"
     }
+
     override fun apply(request: RequestTemplate) {
         val time = Date(System.currentTimeMillis())
         val data: String = when (request.method()) {
