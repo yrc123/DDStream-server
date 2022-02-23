@@ -9,9 +9,10 @@ import org.springframework.cloud.openfeign.support.SpringDecoder
 import org.springframework.cloud.openfeign.support.SpringEncoder
 import org.springframework.cloud.openfeign.support.SpringMvcContract
 import javax.annotation.Resource
+import kotlin.reflect.KClass
 
-abstract class AbstractFeignClientFactory<T>(
-    val clazz: Class<T>,
+abstract class AbstractFeignClientFactory<T : Any>(
+    private val clazz: KClass<T>,
 ) {
     @Resource
     lateinit var jwtRequestInterceptor: JwtRequestInterceptor
@@ -36,7 +37,7 @@ abstract class AbstractFeignClientFactory<T>(
             .contract(SpringMvcContract())
             .requestInterceptor(jwtRequestInterceptor)
             .target(
-                clazz,
+                clazz.java,
                 clientService.getClientInstance(id)?.uri.toString()
             )
     }

@@ -1,4 +1,4 @@
-package com.yrc.ddstreamserver.service.actuator
+package com.yrc.ddstreamserver.service.feign.actuator
 
 import org.springframework.web.bind.annotation.GetMapping
 
