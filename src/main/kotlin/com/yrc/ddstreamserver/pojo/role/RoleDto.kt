@@ -1,11 +1,13 @@
 package com.yrc.ddstreamserver.pojo.role
 
+import com.yrc.ddstreamserver.pojo.permission.PermissionEnumEntity
 import org.valiktor.functions.hasSize
 import org.valiktor.functions.isNotNull
 import org.valiktor.validate
 
 data class RoleDto(
     var id: String? = null,
+    var permissionList: List<PermissionEnumEntity>? = null,
 ) {
     companion object {
         const val ID_MAX = 64

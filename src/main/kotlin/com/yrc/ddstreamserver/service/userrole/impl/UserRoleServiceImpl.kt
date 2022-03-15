@@ -7,4 +7,13 @@ import com.yrc.ddstreamserver.service.userrole.UserRoleService
 import org.springframework.stereotype.Service
 
 @Service
-class UserRoleServiceImpl : UserRoleService, ServiceImpl<UserRoleMapper, UserRoleEntity>()
+class UserRoleServiceImpl : UserRoleService, ServiceImpl<UserRoleMapper, UserRoleEntity>() {
+    override fun listRolesByUserIds(userIds: List<String>): Map<String, List<String>> {
+        return ktQuery()
+            .`in`(UserRoleEntity::userId, userIds)
+            .list()
+            .filterNotNull()
+            .groupBy({ it.userId!! }, { it.roleId!! })
+            .toMap()
+    }
+}

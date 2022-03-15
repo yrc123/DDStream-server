@@ -32,6 +32,20 @@ enum class EnumServerException(private val exception: SimpleException) {
             "not found"
         )
     ),
+    NOT_LOGIN(
+        SimpleException(
+            HttpStatus.SC_FORBIDDEN,
+            "权限不足",
+            "forbidden"
+        )
+    ),
+    CAN_NOT_CONNECT_TO_CLIENT(
+        SimpleException(
+            HttpStatus.SC_INTERNAL_SERVER_ERROR,
+            "无法连接到推流服务器",
+            "can not connect to client"
+        )
+    ),
     ;
 
     fun build(): SimpleException {

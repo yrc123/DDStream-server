@@ -67,6 +67,7 @@ class FFmpegLinkServiceImpl(
                             .data
                             ?.alive ?: false
                     } catch (e: Exception) {
+                        e.printStackTrace()
                         false
                     }
                 )

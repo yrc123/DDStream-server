@@ -1,5 +1,6 @@
 package com.yrc.ddstreamserver.controller.common
 
+import cn.dev33.satoken.exception.NotLoginException
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.yrc.common.exception.common.CommonException
 import com.yrc.common.exception.valiktor.ValidateException
@@ -62,6 +63,16 @@ class GlobalExceptionHandler {
         res: HttpServletResponse
     ): ResponseDto<ResponseUtils.ExceptionData> {
         val commonException = ValidateException(HttpStatus.SC_BAD_REQUEST, e)
+        res.status = commonException.getCode()
+        return ResponseUtils.exceptionResponse(commonException)
+    }
+
+    @ExceptionHandler(NotLoginException::class)
+    fun notLoginExceptionHandler(
+        e: NotLoginException,
+        res: HttpServletResponse
+    ): ResponseDto<ResponseUtils.ExceptionData> {
+        val commonException = EnumServerException.NOT_LOGIN.build()
         res.status = commonException.getCode()
         return ResponseUtils.exceptionResponse(commonException)
     }

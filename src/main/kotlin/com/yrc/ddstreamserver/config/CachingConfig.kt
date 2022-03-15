@@ -16,6 +16,7 @@ class CachingConfig {
         val cacheManager = CaffeineCacheManager()
         cacheManager.registerCustomCache("ffmpeg-service", buildCache(10 * 60))
         cacheManager.registerCustomCache("ffmpeg-ssl", buildCache(10 * 60))
+        cacheManager.registerCustomCache("default-3s", buildCache(3))
         return cacheManager
     }
 

@@ -1,10 +1,7 @@
 package com.yrc.ddstreamserver.controller.role
 
 import cn.dev33.satoken.annotation.SaCheckPermission
-import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO
 import com.yrc.common.pojo.common.ResponseDto
-import com.yrc.common.utils.PageUtils.converterResultPage
-import com.yrc.common.utils.PageUtils.converterSearchPage
 import com.yrc.common.utils.ResponseUtils
 import com.yrc.ddstreamserver.controller.common.ControllerUtils
 import com.yrc.ddstreamserver.pojo.permission.PermissionName.ROLE_READ
@@ -12,6 +9,7 @@ import com.yrc.ddstreamserver.pojo.permission.PermissionName.ROLE_WRITE
 import com.yrc.ddstreamserver.pojo.role.RoleDto
 import com.yrc.ddstreamserver.pojo.role.RoleEntity
 import com.yrc.ddstreamserver.service.role.RoleService
+import org.springframework.beans.BeanUtils
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -22,11 +20,14 @@ class RoleController(
 
     @SaCheckPermission(ROLE_READ)
     @GetMapping("/roles")
-    fun listRole(page: PageDTO<RoleDto>): ResponseDto<PageDTO<RoleDto>> {
-        val searchPage = page.converterSearchPage<RoleDto, RoleEntity>()
-        val resultPage = roleService.page(searchPage)
-            .converterResultPage(RoleDto::class, ControllerUtils::defaultPageConverterMethod)
-        return ResponseUtils.successResponse(resultPage)
+    fun listRole(): ResponseDto<List<RoleDto>> {
+        val resultDtos = roleService.list()
+            .map {
+                val roleDto = RoleDto()
+                BeanUtils.copyProperties(it, roleDto)
+                roleDto
+            }
+        return ResponseUtils.successResponse(resultDtos)
     }
 
     @SaCheckPermission(ROLE_WRITE)

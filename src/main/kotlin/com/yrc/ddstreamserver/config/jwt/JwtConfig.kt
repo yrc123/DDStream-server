@@ -6,7 +6,9 @@ import com.yrc.common.service.jwt.JwtService
 import com.yrc.common.service.jwt.impl.JwtServiceImpl
 import com.yrc.ddstreamserver.pojo.common.ApplicationConfiguration
 import com.yrc.ddstreamserver.service.keyvaluestore.KeyValueStoreService
+import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.io.Decoders
+import io.jsonwebtoken.security.Keys
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.security.KeyFactory
@@ -41,7 +43,8 @@ class JwtConfig {
                     .getInstance("EC")
                     .generatePrivate(PKCS8EncodedKeySpec(privateKeyString))
             } else {
-                TODO("抛出异常")
+                Keys.keyPairFor(SignatureAlgorithm.ES512).private
+//                TODO("生成keypair")
             }
         }
 

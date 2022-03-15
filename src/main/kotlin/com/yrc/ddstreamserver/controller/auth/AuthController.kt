@@ -21,6 +21,7 @@ class AuthController(
     private val salt: String
 ) {
 
+    //TODO: 是否开放注册
     @PostMapping("/auth/register")
     fun register(@RequestBody userDto: UserDto): ResponseDto<UserDto> {
         UserDto.commonValidator.invoke(userDto)
@@ -40,15 +41,15 @@ class AuthController(
         AuthDto.commonValidator.invoke(authDto)
         val userList = userService.listByUsernames(listOf(authDto.username!!))
         return if (userList.size != 1) {
-            ResponseUtils.failStringResponse("user does not exist")
+            ResponseUtils.failStringResponse("用户不存在")
         } else {
             userList.first().let {
                 val md5Password = SaSecureUtil.md5BySalt(authDto.password, salt)
                 if (it.password == md5Password) {
                     StpUtil.login(it.id, authDto.rememberMe ?: false)
-                    ResponseUtils.successStringResponse()
+                    ResponseUtils.successResponse(StpUtil.getTokenValue())
                 } else {
-                    ResponseUtils.failStringResponse()
+                    ResponseUtils.failStringResponse("密码错误")
                 }
             }
         }
