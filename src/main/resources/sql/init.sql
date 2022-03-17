@@ -64,7 +64,7 @@ create table if not exists USER_ROLE
         primary key (id),
     constraint USER_ROLE_ROLE_ID_FK
         foreign key (role_id) references ROLE
-            on update cascade on delete cascade,
+            on update cascade,
     constraint USER_ROLE_USER_ID_FK
         foreign key (user_id) references USER
             on update cascade on delete cascade

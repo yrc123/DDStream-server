@@ -46,6 +46,13 @@ enum class EnumServerException(private val exception: SimpleException) {
             "can not connect to client"
         )
     ),
+    PERMISSION_NOT_EXIST(
+        SimpleException(
+            HttpStatus.SC_BAD_REQUEST,
+            "权限不存在",
+            "permission not exist"
+        )
+    ),
     ;
 
     fun build(): SimpleException {

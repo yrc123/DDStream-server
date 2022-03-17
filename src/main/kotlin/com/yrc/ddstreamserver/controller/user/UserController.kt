@@ -4,7 +4,6 @@ import cn.dev33.satoken.annotation.SaCheckLogin
 import cn.dev33.satoken.annotation.SaCheckPermission
 import cn.dev33.satoken.secure.SaSecureUtil
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper
-import com.baomidou.mybatisplus.extension.kotlin.KtQueryWrapper
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO
 import com.yrc.common.pojo.common.ResponseDto
 import com.yrc.common.utils.PageUtils.converterResultPage
@@ -17,7 +16,6 @@ import com.yrc.ddstreamserver.pojo.permission.PermissionName.USER_READ
 import com.yrc.ddstreamserver.pojo.permission.PermissionName.USER_WRITE
 import com.yrc.ddstreamserver.pojo.user.UserDto
 import com.yrc.ddstreamserver.pojo.user.UserEntity
-import com.yrc.ddstreamserver.pojo.userrole.UserRoleEntity
 import com.yrc.ddstreamserver.service.role.RoleService
 import com.yrc.ddstreamserver.service.user.UserService
 import com.yrc.ddstreamserver.service.userrole.UserRoleService
@@ -50,10 +48,9 @@ class UserController(
         }
     }
 
-    //不会存RoleList
     @SaCheckPermission(USER_WRITE)
     @PostMapping("/users")
-    fun addUser(@RequestBody userDto: UserDto): ResponseDto<UserDto> {
+    fun insertUser(@RequestBody userDto: UserDto): ResponseDto<UserDto> {
         UserDto.commonValidator.invoke(userDto)
         val saveDto = ControllerUtils.saveAndReturnDto(
             userService,
@@ -61,6 +58,7 @@ class UserController(
             UserDto::class,
             UserEntity::class
         )
+        userRoleService.saveRolesByUserId(saveDto.id!!, userDto.roleList!!)
         return ResponseUtils.successResponse(saveDto)
     }
 
@@ -121,14 +119,10 @@ class UserController(
             val rolesInMem = userDto.roleList
                 ?.toSet()
                 ?: setOf()
-            val rolesAdd = rolesInMem - rolesInDb
+            val rolesSave = rolesInMem - rolesInDb
             val rolesRemove = rolesInDb - rolesInMem
-            userRoleService.remove(KtQueryWrapper(UserRoleEntity::class.java)
-                .`in`(UserRoleEntity::userId, resultDto.id)
-                .`in`(UserRoleEntity::roleId, rolesRemove)
-            )
-            val userRoleAdd = rolesAdd.map { UserRoleEntity(null, resultDto.id, it) }
-            userRoleService.saveBatch(userRoleAdd)
+            userRoleService.removeRolesByUserId(resultDto.id!!, rolesRemove)
+            userRoleService.saveRolesByUserId(resultDto.id!!, rolesSave)
             //回填
             resultDto.password = null
             resultDto.roleList = userRoleService.listRolesByUserIds(listOf(resultDto.id!!))[resultDto.id] ?: listOf()
