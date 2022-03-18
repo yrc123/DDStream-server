@@ -18,7 +18,7 @@ enum class PermissionEnumEntity(private val id: String, val description: String?
     companion object {
         val permissionEnumMap = values().associateBy { it.value }
         fun get(id: String): PermissionEnumEntity {
-            return permissionEnumMap[id] ?: throw EnumServerException.PERMISSION_NOT_EXIST.build()
+            return permissionEnumMap[id] ?: throw EnumServerException.PERMISSION_NOT_CONTAINS.build()
         }
     }
 }

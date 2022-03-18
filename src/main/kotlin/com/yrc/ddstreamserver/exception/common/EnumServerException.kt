@@ -46,11 +46,25 @@ enum class EnumServerException(private val exception: SimpleException) {
             "can not connect to client"
         )
     ),
-    PERMISSION_NOT_EXIST(
+    PERMISSION_NOT_CONTAINS(
         SimpleException(
             HttpStatus.SC_BAD_REQUEST,
             "权限不存在",
             "permission not exist"
+        )
+    ),
+    JWT_PRIVATE_KEY_NOT_CONTAINS(
+        SimpleException(
+            HttpStatus.SC_INTERNAL_SERVER_ERROR,
+            "jwt密钥不存在",
+            "jwt private key not contains"
+        )
+    ),
+    NOT_OPEN_REGISTER(
+        SimpleException(
+            HttpStatus.SC_BAD_REQUEST,
+            "未开放注册",
+            "not open register"
         )
     ),
     ;

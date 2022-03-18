@@ -8,8 +8,12 @@ import org.springframework.stereotype.Service
 
 @Service
 class KeyValueStoreServiceImpl : KeyValueStoreService, ServiceImpl<KeyValueStoreMapper, KeyValueEntity>() {
+
     override fun contains(key: String): Boolean {
-        val entity = baseMapper.selectById(key)
-        return entity?.value != null
+        return contains(listOf(key))
+    }
+
+    override fun contains(keys: Collection<String>): Boolean {
+        return (listByIds(keys) ?: listOf()).size == keys.size
     }
 }

@@ -6,9 +6,12 @@ import cn.dev33.satoken.stp.StpUtil
 import com.yrc.common.pojo.common.ResponseDto
 import com.yrc.common.utils.ResponseUtils
 import com.yrc.ddstreamserver.controller.common.ControllerUtils
+import com.yrc.ddstreamserver.exception.common.EnumServerException
 import com.yrc.ddstreamserver.pojo.auth.AuthDto
+import com.yrc.ddstreamserver.pojo.config.ApplicationConfiguration
 import com.yrc.ddstreamserver.pojo.user.UserDto
 import com.yrc.ddstreamserver.pojo.user.UserEntity
+import com.yrc.ddstreamserver.service.keyvaluestore.KeyValueStoreService
 import com.yrc.ddstreamserver.service.user.UserService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.web.bind.annotation.*
@@ -17,13 +20,20 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/v1")
 class AuthController(
     private val userService: UserService,
+    private val keyValueStoreService: KeyValueStoreService,
     @Value("dd-stream.server.password-salt")
-    private val salt: String
+    private val salt: String,
 ) {
 
-    //TODO: 是否开放注册
     @PostMapping("/auth/register")
     fun register(@RequestBody userDto: UserDto): ResponseDto<UserDto> {
+        val openRegister = keyValueStoreService
+            .getById(ApplicationConfiguration.OPEN_REGISTER.toString())
+            .value
+            ?.toBoolean() ?: false
+        if (!openRegister) {
+            throw EnumServerException.NOT_OPEN_REGISTER.build()
+        }
         UserDto.commonValidator.invoke(userDto)
         userDto.password = SaSecureUtil.md5BySalt(userDto.password, salt)
         val resultDto = ControllerUtils.saveAndReturnDto(

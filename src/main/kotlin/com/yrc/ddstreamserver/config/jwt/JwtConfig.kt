@@ -4,11 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.yrc.common.service.jwt.JwtKeyProvider
 import com.yrc.common.service.jwt.JwtService
 import com.yrc.common.service.jwt.impl.JwtServiceImpl
-import com.yrc.ddstreamserver.pojo.common.ApplicationConfiguration
+import com.yrc.ddstreamserver.exception.common.EnumServerException
+import com.yrc.ddstreamserver.pojo.config.ApplicationConfiguration.JWT_PRIVATE_KEY
 import com.yrc.ddstreamserver.service.keyvaluestore.KeyValueStoreService
-import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.io.Decoders
-import io.jsonwebtoken.security.Keys
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.security.KeyFactory
@@ -30,22 +29,13 @@ class JwtConfig {
 
     class EncodeJwtKeyProvider(private val keyValueStoreService: KeyValueStoreService) : JwtKeyProvider {
         private val _privateKey: PrivateKey by lazy {
-            if (keyValueStoreService
-                    .contains(ApplicationConfiguration.JWT_ENCODE_PUBLIC_KEY.toString())
-                && keyValueStoreService
-                    .contains(ApplicationConfiguration.JWT_ENCODE_PRIVATE_KEY.toString())
-            ) {
-                val encodePrivateKey = keyValueStoreService
-                    .getById(ApplicationConfiguration.JWT_ENCODE_PRIVATE_KEY.toString())
-                    .value
-                val privateKeyString = Decoders.BASE64.decode(encodePrivateKey)
-                KeyFactory
-                    .getInstance("EC")
-                    .generatePrivate(PKCS8EncodedKeySpec(privateKeyString))
-            } else {
-                Keys.keyPairFor(SignatureAlgorithm.ES512).private
-//                TODO("生成keypair")
-            }
+            val encodePrivateKey = keyValueStoreService
+                .getById(JWT_PRIVATE_KEY.toString())
+                .value ?: throw EnumServerException.JWT_PRIVATE_KEY_NOT_CONTAINS.build()
+            val privateKeyString = Decoders.BASE64.decode(encodePrivateKey)
+            KeyFactory
+                .getInstance("EC")
+                .generatePrivate(PKCS8EncodedKeySpec(privateKeyString))
         }
 
         override fun getPrivateKey(): PrivateKey {

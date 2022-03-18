@@ -5,4 +5,5 @@ import com.yrc.ddstreamserver.pojo.keyvaluestore.KeyValueEntity
 
 interface KeyValueStoreService : IService<KeyValueEntity> {
     fun contains(key: String): Boolean
+    fun contains(keys: Collection<String>): Boolean
 }
