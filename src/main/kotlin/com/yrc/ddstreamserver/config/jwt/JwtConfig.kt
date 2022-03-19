@@ -28,15 +28,7 @@ class JwtConfig {
     }
 
     class EncodeJwtKeyProvider(private val keyValueStoreService: KeyValueStoreService) : JwtKeyProvider {
-        private val _privateKey: PrivateKey by lazy {
-            val encodePrivateKey = keyValueStoreService
-                .getById(JWT_PRIVATE_KEY.toString())
-                .value ?: throw EnumServerException.JWT_PRIVATE_KEY_NOT_CONTAINS.build()
-            val privateKeyString = Decoders.BASE64.decode(encodePrivateKey)
-            KeyFactory
-                .getInstance("EC")
-                .generatePrivate(PKCS8EncodedKeySpec(privateKeyString))
-        }
+        private var _privateKey: PrivateKey = selectPrivateKey()
 
         override fun getPrivateKey(): PrivateKey {
             return _privateKey
@@ -44,6 +36,21 @@ class JwtConfig {
 
         override fun getPublicKey(): PublicKey {
             TODO("Not yet implemented")
+        }
+        private fun selectPrivateKey(): PrivateKey {
+            val encodePrivateKey = keyValueStoreService
+                .getById(JWT_PRIVATE_KEY.toString())
+                .value ?: throw EnumServerException.JWT_PRIVATE_KEY_NOT_CONTAINS.build()
+            val privateKeyString = Decoders.BASE64.decode(encodePrivateKey)
+            return KeyFactory
+                .getInstance("EC")
+                .generatePrivate(PKCS8EncodedKeySpec(privateKeyString))
+        }
+
+        override fun reset() {
+            synchronized(_privateKey) {
+                _privateKey = selectPrivateKey()
+            }
         }
     }
 }
