@@ -26,7 +26,7 @@ class AuthController(
 ) {
 
     @PostMapping("/auth/register")
-    fun register(@RequestBody userDto: UserDto): ResponseDto<UserDto> {
+    fun register(@RequestBody userDto: UserDto): ResponseDto<String> {
         val openRegister = keyValueStoreService
             .getById(ApplicationConfiguration.OPEN_REGISTER.toString())
             .value
@@ -43,7 +43,7 @@ class AuthController(
             UserEntity::class
         )
         StpUtil.login(resultDto.id, true)
-        return ResponseUtils.successResponse(resultDto)
+        return ResponseUtils.successResponse(StpUtil.getTokenValue())
     }
 
     @PostMapping("/auth/login")
