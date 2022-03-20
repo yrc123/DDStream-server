@@ -78,7 +78,7 @@ class AuthController(
                     StpUtil.openSafe(600)
                     ResponseUtils.successStringResponse()
                 } else {
-                    ResponseUtils.failStringResponse()
+                    ResponseUtils.failStringResponse("验证失败")
                 }
             }
         }
@@ -86,6 +86,7 @@ class AuthController(
 
     @GetMapping("/auth/logout")
     fun logout(): ResponseDto<String> {
+        StpUtil.closeSafe()
         StpUtil.logout()
         return ResponseUtils.successStringResponse()
     }

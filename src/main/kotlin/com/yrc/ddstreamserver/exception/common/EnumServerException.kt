@@ -35,8 +35,9 @@ enum class EnumServerException(private val exception: SimpleException) {
     NOT_LOGIN(
         SimpleException(
             HttpStatus.SC_FORBIDDEN,
-            "权限不足",
-            "forbidden"
+            "用户未登录",
+            "not login",
+            1
         )
     ),
     CAN_NOT_CONNECT_TO_CLIENT(
@@ -68,10 +69,29 @@ enum class EnumServerException(private val exception: SimpleException) {
         )
     ),
     NOT_SUPPORT_DECODE_JWS(
-        SimpleException(HttpStatus.SC_BAD_REQUEST,
-            "not support decode jws")
+        SimpleException(
+            HttpStatus.SC_BAD_REQUEST,
+            "不支持解码jws",
+            "not support decode jws"
+        )
+    ),
+    NEED_CONFIRM_ACCESS(
+        SimpleException(
+            HttpStatus.SC_UNAUTHORIZED,
+            "需要二级认证",
+            "need confirm access"
+        )
+    ),
+    NOT_PERMISSION(
+        SimpleException(
+            HttpStatus.SC_FORBIDDEN,
+            "权限不足",
+            "not permission",
+            2
+        )
     ),
     ;
+
 
     fun build(): SimpleException {
         return exception

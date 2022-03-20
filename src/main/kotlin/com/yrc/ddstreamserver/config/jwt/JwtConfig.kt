@@ -51,7 +51,7 @@ class JwtConfig {
         }
 
         override fun reset() {
-            synchronized(_privateKey!!) {
+            synchronized(getPrivateKey()) {
                 _privateKey = selectPrivateKey()
             }
         }

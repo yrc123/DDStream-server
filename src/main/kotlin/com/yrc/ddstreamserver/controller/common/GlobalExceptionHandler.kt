@@ -1,6 +1,8 @@
 package com.yrc.ddstreamserver.controller.common
 
 import cn.dev33.satoken.exception.NotLoginException
+import cn.dev33.satoken.exception.NotPermissionException
+import cn.dev33.satoken.exception.NotSafeException
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.yrc.common.exception.common.CommonException
 import com.yrc.common.exception.valiktor.ValidateException
@@ -73,6 +75,26 @@ class GlobalExceptionHandler {
         res: HttpServletResponse
     ): ResponseDto<ResponseUtils.ExceptionData> {
         val commonException = EnumServerException.NOT_LOGIN.build()
+        res.status = commonException.getCode()
+        return ResponseUtils.exceptionResponse(commonException)
+    }
+
+    @ExceptionHandler(NotSafeException::class)
+    fun notSafeExceptionHandler(
+        e: NotSafeException,
+        res: HttpServletResponse
+    ): ResponseDto<ResponseUtils.ExceptionData> {
+        val commonException = EnumServerException.NEED_CONFIRM_ACCESS.build()
+        res.status = commonException.getCode()
+        return ResponseUtils.exceptionResponse(commonException)
+    }
+
+    @ExceptionHandler(NotPermissionException::class)
+    fun notPermissionExceptionHandler(
+        e: NotPermissionException,
+        res: HttpServletResponse
+    ): ResponseDto<ResponseUtils.ExceptionData> {
+        val commonException = EnumServerException.NOT_PERMISSION.build()
         res.status = commonException.getCode()
         return ResponseUtils.exceptionResponse(commonException)
     }
