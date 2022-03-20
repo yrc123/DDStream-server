@@ -101,7 +101,10 @@ class UserController(
     fun updateUser(@PathVariable userId: String, @RequestBody userDto: UserDto): ResponseDto<UserDto> {
         UserDto.updateValidator.invoke(userDto)
         ControllerUtils.checkPathVariable(userId, userDto.id)
-        userDto.password = SaSecureUtil.md5BySalt(userDto.password, salt)
+        if (!userDto.password.isNullOrBlank()) {
+            userDto.password = SaSecureUtil.md5BySalt(userDto.password, salt)
+        }
+        userDto.username = null
         val userEntities = userService.listByIds(listOf(userDto.id))
         if (userEntities.isNotEmpty()) {
             //更新user

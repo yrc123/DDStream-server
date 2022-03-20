@@ -84,6 +84,31 @@ class AuthController(
         }
     }
 
+    @SaCheckLogin
+    @PatchMapping("/auth/setting")
+    fun updateUser(@RequestBody userDto: UserDto): ResponseDto<UserDto> {
+        UserDto.updateValidator.invoke(userDto)
+        if (!userDto.password.isNullOrBlank()) {
+            userDto.password = SaSecureUtil.md5BySalt(userDto.password, salt)
+        }
+        userDto.username = null
+        val userEntities = userService.listByIds(listOf(userDto.id))
+        if (userEntities.isNotEmpty()) {
+            //更新user
+            val resultDto = ControllerUtils.updateAndReturnDto(
+                userService,
+                userDto,
+                userEntities.first(),
+                UserDto::class
+            )
+            //回填
+            resultDto.password = null
+            return ResponseUtils.successResponse(resultDto)
+        } else {
+            throw EnumServerException.NOT_FOUND.build()
+        }
+    }
+
     @GetMapping("/auth/logout")
     fun logout(): ResponseDto<String> {
         StpUtil.closeSafe()
