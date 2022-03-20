@@ -67,8 +67,8 @@ class InitApplication(
         }
     }
     fun initAdmin() {
-        if (!keyValueStoreService.contains(INIT.toString())
-            && keyValueStoreService.getById(INIT.toString()).value.toBoolean()) {
+        if (!(keyValueStoreService.contains(INIT.toString())
+                && keyValueStoreService.getById(INIT.toString()).value.toBoolean())) {
             val userEntity = UserEntity(null, ADMIN_USERNAME, getPassword(ADMIN_PASSWORD), ADMIN_USERNAME, null)
             userService.saveOrUpdate(userEntity)
             roleService.saveOrUpdate(RoleEntity(ADMIN_ROLE_NAME))

@@ -67,6 +67,10 @@ enum class EnumServerException(private val exception: SimpleException) {
             "not open register"
         )
     ),
+    NOT_SUPPORT_DECODE_JWS(
+        SimpleException(HttpStatus.SC_BAD_REQUEST,
+            "not support decode jws")
+    ),
     ;
 
     fun build(): SimpleException {

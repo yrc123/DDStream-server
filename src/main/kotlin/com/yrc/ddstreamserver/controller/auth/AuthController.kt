@@ -75,7 +75,7 @@ class AuthController(
             userList.first().let {
                 val md5Password = SaSecureUtil.md5BySalt(authDto.password, salt)
                 if (it.password == md5Password) {
-                    StpUtil.openSafe(120)
+                    StpUtil.openSafe(600)
                     ResponseUtils.successStringResponse()
                 } else {
                     ResponseUtils.failStringResponse()
@@ -84,7 +84,6 @@ class AuthController(
         }
     }
 
-    @SaCheckLogin
     @GetMapping("/auth/logout")
     fun logout(): ResponseDto<String> {
         StpUtil.logout()

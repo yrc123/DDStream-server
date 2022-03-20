@@ -28,14 +28,17 @@ class JwtConfig {
     }
 
     class EncodeJwtKeyProvider(private val keyValueStoreService: KeyValueStoreService) : JwtKeyProvider {
-        private var _privateKey: PrivateKey = selectPrivateKey()
+        private var _privateKey: PrivateKey? = null
 
         override fun getPrivateKey(): PrivateKey {
-            return _privateKey
+            if (_privateKey == null) {
+                _privateKey = selectPrivateKey()
+            }
+            return _privateKey!!
         }
 
         override fun getPublicKey(): PublicKey {
-            TODO("Not yet implemented")
+            throw EnumServerException.NOT_SUPPORT_DECODE_JWS.build()
         }
         private fun selectPrivateKey(): PrivateKey {
             val encodePrivateKey = keyValueStoreService
@@ -48,7 +51,7 @@ class JwtConfig {
         }
 
         override fun reset() {
-            synchronized(_privateKey) {
+            synchronized(_privateKey!!) {
                 _privateKey = selectPrivateKey()
             }
         }
