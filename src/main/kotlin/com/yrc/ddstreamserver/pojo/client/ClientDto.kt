@@ -1,5 +1,6 @@
 package com.yrc.ddstreamserver.pojo.client
 
+import com.yrc.common.pojo.common.AbstractDto
 import org.valiktor.functions.hasSize
 import org.valiktor.functions.isNotNull
 import org.valiktor.functions.isNull
@@ -12,7 +13,7 @@ data class ClientDto(
     var nickname: String? = null,
     var note: String? = null,
     var up: Boolean? = null
-) {
+) : AbstractDto() {
    companion object {
        const val ID_MAX = 64
        const val ID_MIN = 1

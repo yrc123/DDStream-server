@@ -1,5 +1,6 @@
 package com.yrc.ddstreamserver.pojo.config
 
+import com.yrc.common.pojo.common.AbstractDto
 import com.yrc.ddstreamserver.pojo.config.ApplicationConfiguration.*
 import com.yrc.ddstreamserver.pojo.keyvaluestore.KeyValueEntity
 import org.valiktor.functions.hasSize
@@ -11,7 +12,7 @@ data class ConfigDto(
     var jwtPublicKey: String? = null,
     var jwtPrivateKey: String? = null,
     var openRegister: Boolean? = null,
-) {
+) : AbstractDto() {
     companion object {
         val commonValidator = { configDto: ConfigDto ->
             validate(configDto) {

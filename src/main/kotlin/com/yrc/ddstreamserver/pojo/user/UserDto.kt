@@ -1,5 +1,6 @@
 package com.yrc.ddstreamserver.pojo.user
 
+import com.yrc.common.pojo.common.AbstractDto
 import org.valiktor.functions.hasSize
 import org.valiktor.functions.isEmail
 import org.valiktor.functions.isNotNull
@@ -12,7 +13,7 @@ data class UserDto(
     var nickname: String? = null,
     var email: String? = null,
     var roleList: List<String>? = null,
-) {
+) : AbstractDto() {
     companion object {
         const val ID_MAX = 64
         const val ID_MIN = 1
