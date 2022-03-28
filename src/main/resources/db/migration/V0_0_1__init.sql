@@ -5,6 +5,8 @@ create table if not exists CLIENT
     port     INT          not null,
     nickname VARCHAR(128) not null,
     note     VARCHAR(512),
+    create_time DATETIME not null,
+    update_time DATETIME not null,
     constraint CLIENT_PK
         primary key (id)
 );
@@ -16,6 +18,8 @@ create table if not exists KEY_VALUE_STORE
 (
     key VARCHAR (128) not null,
     value VARCHAR(512) not null,
+    create_time DATETIME not null,
+    update_time DATETIME not null,
     constraint KEY_VALUE_STORE_PK
         primary key (key)
 );
@@ -33,6 +37,8 @@ create table if not exists KEY_VALUE_STORE
 create table if not exists ROLE
 (
     id VARCHAR(64) not null,
+    create_time DATETIME not null,
+    update_time DATETIME not null,
     constraint ROLE_PK
         primary key (id)
 );
@@ -47,6 +53,8 @@ create table if not exists USER
     password VARCHAR(128) not null,
     nickname VARCHAR(128) not null,
     email    VARCHAR(64),
+    create_time DATETIME not null,
+    update_time DATETIME not null,
     constraint USER_PK
         primary key (id)
 );
@@ -60,6 +68,8 @@ create table if not exists USER_ROLE
     id      VARCHAR(64) not null,
     user_id VARCHAR(64) not null,
     role_id VARCHAR(64) not null,
+    create_time DATETIME not null,
+    update_time DATETIME not null,
     constraint USER_ROLE_PK
         primary key (id),
     constraint USER_ROLE_ROLE_ID_FK
@@ -78,6 +88,8 @@ create table if not exists ROLE_PERMISSION
     id            VARCHAR(64) not null,
     role_id       VARCHAR(64) not null,
     permission_id VARCHAR(64) not null,
+    create_time DATETIME not null,
+    update_time DATETIME not null,
     constraint ROLE_PERMISSION_PK
         primary key (id),
 --     constraint ROLE_PERMISSION_PERMISSION_ID_FK
@@ -91,3 +103,14 @@ create table if not exists ROLE_PERMISSION
 create unique index if not exists ROLE_PERMISSION_ROLE_ID_PERMISSION_ID_UINDEX
     on ROLE_PERMISSION (role_id, permission_id);
 
+create table FFMPEG_LINK
+(
+    id          VARCHAR(64),
+    name        VARCHAR(128),
+    ffmpeg_list TEXT not null,
+    create_time DATETIME not null,
+    update_time DATETIME not null
+);
+
+create unique index if not exists FFMPEG_LINK_ID_UINDEX
+    on FFMPEG_LINK (id);

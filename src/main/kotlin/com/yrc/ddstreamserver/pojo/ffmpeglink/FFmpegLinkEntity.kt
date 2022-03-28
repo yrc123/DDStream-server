@@ -5,11 +5,12 @@ import com.baomidou.mybatisplus.annotation.TableField
 import com.baomidou.mybatisplus.annotation.TableId
 import com.baomidou.mybatisplus.annotation.TableName
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler
+import com.yrc.common.pojo.common.AbstractEntity
 
-@TableName(value = "FFMPEG_LINK_ENTITY")
+@TableName(value = "FFMPEG_LINK")
 data class FFmpegLinkEntity(
-    @TableId(type = IdType.INPUT) var id: String? = null,
+    @TableId(type = IdType.ASSIGN_UUID) var id: String? = null,
     var name: String? = null,
     @TableField(typeHandler = JacksonTypeHandler::class)
     var ffmpegList: List<FFmpegLinkItemEntity>? = null,
-)
+) : AbstractEntity()
