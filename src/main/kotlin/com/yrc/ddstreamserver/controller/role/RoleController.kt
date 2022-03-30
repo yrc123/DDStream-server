@@ -86,6 +86,7 @@ class RoleController(
         RoleDto.commonValidator.invoke(roleDto)
         val roleEntities = roleService.listByIds(listOf(roleDto.id))
         if (roleEntities.isNotEmpty()) {
+            roleService.updateById(roleEntities.first())
             //更新permission
             val rolePermissionMap = rolePermissionService.listPermissionsByRoleIds(listOf(roleDto.id!!))
             val permissionsInDb = rolePermissionMap[roleDto.id]
