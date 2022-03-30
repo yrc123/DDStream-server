@@ -2,20 +2,16 @@ package com.yrc.ddstreamserver.service.feign.ffmpeg
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page
 import com.yrc.common.pojo.common.ResponseDto
-import com.yrc.common.pojo.ffmpeg.FFmpegConfigDto
 import com.yrc.common.pojo.ffmpeg.FFmpegProcessDto
 import org.springframework.web.bind.annotation.*
 
 interface FFmpegService {
 
-    @PostMapping("/api/client/ffmpeg/{id}:start")
-    fun startPush(@PathVariable id: String, @RequestBody configDto: FFmpegConfigDto): ResponseDto<FFmpegProcessDto>
+    @PostMapping("/api/client/ffmpeg/{name}:start")
+    fun startPush(@PathVariable name: String, ffmpegProcessDto: FFmpegProcessDto): ResponseDto<FFmpegProcessDto>
 
-    @PostMapping("/api/client/ffmpeg/{id}:start-with-string")
-    fun startPushWithString(@PathVariable id: String, @RequestBody configList: List<String>): ResponseDto<FFmpegProcessDto>
-
-    @GetMapping("/api/client/ffmpeg/{id}:stop")
-    fun stopPush(@PathVariable id: String): ResponseDto<String>
+    @GetMapping("/api/client/ffmpeg/{name}:stop")
+    fun stopPush(@PathVariable name: String): ResponseDto<String>
 
     @DeleteMapping("/api/client/ffmpeg/{id}")
     fun deleteProcess(@PathVariable id: String): ResponseDto<String>

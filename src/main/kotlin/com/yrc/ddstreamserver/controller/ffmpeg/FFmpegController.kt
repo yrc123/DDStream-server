@@ -3,7 +3,6 @@ package com.yrc.ddstreamserver.controller.ffmpeg
 import cn.dev33.satoken.annotation.SaCheckPermission
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page
 import com.yrc.common.pojo.common.ResponseDto
-import com.yrc.common.pojo.ffmpeg.FFmpegConfigDto
 import com.yrc.common.pojo.ffmpeg.FFmpegProcessDto
 import com.yrc.ddstreamserver.pojo.permission.PermissionName.FFMPEG_READ
 import com.yrc.ddstreamserver.pojo.permission.PermissionName.FFMPEG_WRITE
@@ -12,21 +11,15 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1")
+//TODO: 添加校验
 class FFmpegController(
     private val ffmpegServiceFactory: FFmpegServiceFactory
 ) {
     @SaCheckPermission(FFMPEG_WRITE)
     @PostMapping("/client/{clientId}/ffmpeg/{id}:start")
-    fun startPush(@PathVariable clientId: String, @PathVariable id: String, @RequestBody configDto: FFmpegConfigDto): ResponseDto<FFmpegProcessDto> {
+    fun startPush(@PathVariable clientId: String, @PathVariable id: String, @RequestBody ffmpegProcessDto: FFmpegProcessDto): ResponseDto<FFmpegProcessDto> {
         return ffmpegServiceFactory.getServiceInstance(clientId)
-            .startPush(id, configDto)
-    }
-
-    @SaCheckPermission(FFMPEG_WRITE)
-    @PostMapping("/client/{clientId}/ffmpeg/{id}:start-with-list")
-    fun startPushWithString(@PathVariable clientId: String, @PathVariable id: String, @RequestBody configList: List<String>): ResponseDto<FFmpegProcessDto> {
-        return ffmpegServiceFactory.getServiceInstance(clientId)
-            .startPushWithString(id, configList)
+            .startPush(id, ffmpegProcessDto)
     }
 
     @SaCheckPermission(FFMPEG_WRITE)
