@@ -114,3 +114,7 @@ create table FFMPEG_LINK
 
 create unique index if not exists FFMPEG_LINK_ID_UINDEX
     on FFMPEG_LINK (id);
+
+create unique index if not exists FFMPEG_LINK_NAME_UINDEX
+    on FFMPEG_LINK (name);
+
