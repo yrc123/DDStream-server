@@ -23,6 +23,7 @@ class InfoController(
     @SaCheckSafe
     @PatchMapping("/info")
     fun updateUser(@RequestBody userDto: UserDto): ResponseDto<UserDto> {
+        UserDto.updateValidator.invoke(userDto)
         val userId = StpUtil.getLoginIdAsString()
         return userController.updateUser(userId, userDto)
     }
