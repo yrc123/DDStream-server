@@ -1,8 +1,10 @@
 package com.yrc.ddstreamserver.service.ffmpeglink.impl
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl
 import com.yrc.ddstreamserver.dao.ffmpeglink.FFmpegLinkMapper
 import com.yrc.ddstreamserver.pojo.ffmpeglink.FFmpegLinkEntity
 import com.yrc.ddstreamserver.pojo.ffmpeglink.FFmpegLinkStatusDto
+import com.yrc.ddstreamserver.service.feign.ffmpeg.FFmpegService
 import com.yrc.ddstreamserver.service.feign.ffmpeg.FFmpegServiceFactory
 import com.yrc.ddstreamserver.service.ffmpeglink.FFmpegLinkService
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
@@ -14,28 +16,28 @@ class FFmpegLinkServiceImpl(
     private val ffmpegLinkMapper: FFmpegLinkMapper,
     private val ffmpegServiceFactory: FFmpegServiceFactory,
     private val threadPoolTaskExecutor: ThreadPoolTaskExecutor
-) : FFmpegLinkService {
-    override fun startPush(ffmpegLinkEntity: FFmpegLinkEntity): Boolean {
-        ffmpegLinkMapper.insert(ffmpegLinkEntity)
-        threadPoolTaskExecutor.submit {
-            ffmpegLinkEntity.ffmpegList!!
-                .forEach {
-                    val instance = ffmpegServiceFactory.getServiceInstance(it.clientId!!)
-                    if (it.config == null) {
-                        instance.startPushWithString(it.id!!, it.advancedConfig!!)
-                    } else {
-                        instance.startPush(it.id!!, it.config!!)
-                    }
-                    for (i in 1..5) {
-                        val ffmpeg = instance.getFFmpegById(it.id!!).data
-                        if (ffmpeg?.alive == true) {
-                            break
-                        } else if (i == 5) {
-                            return@forEach
+) : FFmpegLinkService, ServiceImpl<FFmpegLinkMapper, FFmpegLinkEntity>(){
+    override fun startPush(id: String): Boolean {
+        val links = this.listByIds(listOf(id))
+        if (links.isNotEmpty()) {
+            val ffmpegLinkEntity = links.first()
+            threadPoolTaskExecutor.submit {
+                ffmpegLinkEntity.ffmpegList!!
+                    .forEach {
+                        val instance = ffmpegServiceFactory.getServiceInstance(it.clientId!!, FFmpegService::class.java)
+                        it.ffmpegConfig!!.id = instance.startPush(it.ffmpegConfig!!.name!!, it.ffmpegConfig!!).data?.id
+                        for (i in 1..5) {
+                            val ffmpeg = instance.getProcessByName(it.ffmpegConfig!!.name!!).data
+                            if (ffmpeg?.alive == true) {
+                                Thread.sleep(2000)
+                                break
+                            } else if (i > 10) {
+                                return@forEach
+                            }
+                            Thread.sleep(500)
                         }
-                        Thread.sleep(500)
                     }
-                }
+            }
         }
         return true
     }
@@ -45,8 +47,8 @@ class FFmpegLinkServiceImpl(
             ?: return true
         ffmpegLinkEntity.ffmpegList!!.map {
             Runnable {
-                val instance = ffmpegServiceFactory.getServiceInstance(it.clientId!!)
-                instance.stopPush(it.id!!)
+                val instance = ffmpegServiceFactory.getServiceInstance(it.clientId!!, FFmpegService::class.java)
+                instance.stopPush(it.ffmpegConfig!!.name!!)
             }
         }.map {
             threadPoolTaskExecutor.submit(it)
@@ -59,18 +61,16 @@ class FFmpegLinkServiceImpl(
             ?: return listOf()
         return ffmpegLinkEntity.ffmpegList!!.map {
             Callable {
-                val instance = ffmpegServiceFactory.getServiceInstance(it.clientId!!)
-                FFmpegLinkStatusDto(
-                    it.id,
-                    try {
-                        instance.getFFmpegById(it.id!!)
-                            .data
-                            ?.alive ?: false
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        false
-                    }
-                )
+                try {
+                    val instance = ffmpegServiceFactory.getServiceInstance(it.clientId!!,FFmpegService::class.java)
+                    FFmpegLinkStatusDto(
+                        it.clientId,
+                        instance.getProcessByName(it.ffmpegConfig!!.name!!)
+                            .data?.alive ?: false
+                    )
+                } catch (e: Exception) {
+                    FFmpegLinkStatusDto(it.clientId, false, e.message)
+                }
             }
         }.map {
             threadPoolTaskExecutor.submit(it)

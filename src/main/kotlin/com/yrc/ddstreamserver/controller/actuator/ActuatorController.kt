@@ -29,7 +29,7 @@ class ActuatorController(
     fun getHealth(@PathVariable clientId: String): ResponseDto<HealthDto> {
        return ResponseUtils.successResponse(
            actuatorServiceFactory
-               .getServiceInstance(clientId)
+               .getServiceInstance(clientId, ActuatorService::class.java)
                .getHealth()
        )
     }
@@ -38,7 +38,8 @@ class ActuatorController(
     @GetMapping("/actuator/{clientId}/metrics/process.cpu.usage")
     fun getProcessCpuUsage(@PathVariable clientId: String): ResponseDto<CommonActuatorDto> {
         return ResponseUtils.successResponse(
-            actuatorServiceFactory.getServiceInstance(clientId)
+            actuatorServiceFactory
+                .getServiceInstance(clientId, ActuatorService::class.java)
                 .getProcessCpuUsage()
         )
     }
@@ -47,7 +48,8 @@ class ActuatorController(
     @GetMapping("/actuator/{clientId}/metrics/process.uptime")
     fun getProcessUptime(@PathVariable clientId: String): ResponseDto<CommonActuatorDto> {
         return ResponseUtils.successResponse(
-            actuatorServiceFactory.getServiceInstance(clientId)
+            actuatorServiceFactory
+                .getServiceInstance(clientId, ActuatorService::class.java)
                 .getProcessUptime()
         )
     }
@@ -56,7 +58,8 @@ class ActuatorController(
     @GetMapping("/actuator/{clientId}/metrics/system.cpu.usage")
     fun getSystemCpuUsage(@PathVariable clientId: String): ResponseDto<CommonActuatorDto> {
         return ResponseUtils.successResponse(
-            actuatorServiceFactory.getServiceInstance(clientId)
+            actuatorServiceFactory
+                .getServiceInstance(clientId, ActuatorService::class.java)
                 .getSystemCpuUsage()
         )
     }
@@ -65,7 +68,8 @@ class ActuatorController(
     @GetMapping("/actuator/{clientId}/metrics/system.cpu.count")
     fun getSystemCpuCount(@PathVariable clientId: String): ResponseDto<CommonActuatorDto> {
         return ResponseUtils.successResponse(
-            actuatorServiceFactory.getServiceInstance(clientId)
+            actuatorServiceFactory
+                .getServiceInstance(clientId, ActuatorService::class.java)
                 .getSystemCpuCount()
         )
     }
@@ -74,7 +78,8 @@ class ActuatorController(
     @GetMapping("/actuator/{clientId}/metrics/jvm.buffer.memory.used")
     fun getJvmBufferMemoryUsed(@PathVariable clientId: String): ResponseDto<CommonActuatorDto> {
         return ResponseUtils.successResponse(
-            actuatorServiceFactory.getServiceInstance(clientId)
+            actuatorServiceFactory
+                .getServiceInstance(clientId, ActuatorService::class.java)
                 .getJvmBufferMemoryUsed()
         )
     }
@@ -83,7 +88,8 @@ class ActuatorController(
     @GetMapping("/actuator/{clientId}/metrics/jvm.memory.max")
     fun getJvmMemoryMax(@PathVariable clientId: String): ResponseDto<CommonActuatorDto> {
         return ResponseUtils.successResponse(
-            actuatorServiceFactory.getServiceInstance(clientId)
+            actuatorServiceFactory
+                .getServiceInstance(clientId, ActuatorService::class.java)
                 .getJvmMemoryMax()
         )
     }
@@ -92,7 +98,8 @@ class ActuatorController(
     @GetMapping("/actuator/{clientId}/metrics/jvm.memory.used")
     fun getJvmMemoryUsed(@PathVariable clientId: String): ResponseDto<CommonActuatorDto> {
         return ResponseUtils.successResponse(
-            actuatorServiceFactory.getServiceInstance(clientId)
+            actuatorServiceFactory
+                .getServiceInstance(clientId, ActuatorService::class.java)
                 .getJvmMemoryUsed()
         )
     }
@@ -101,7 +108,8 @@ class ActuatorController(
     @GetMapping("/actuator/{clientId}/logfile")
     fun getLogFile(@PathVariable clientId: String): ResponseDto<String> {
         return ResponseUtils.successResponse(
-            actuatorServiceFactory.getServiceInstance(clientId)
+            actuatorServiceFactory
+                .getServiceInstance(clientId, ActuatorService::class.java)
                 .getLogFile()
         )
     }
@@ -110,7 +118,8 @@ class ActuatorController(
     @GetMapping("/actuator/{clientId}")
     @Cacheable(value = ["default-3s"], key = "#clientId")
     fun getDetail(@PathVariable clientId: String): ResponseDto<DetailActuatorDto> {
-        val serviceInstance = actuatorServiceFactory.getServiceInstance(clientId)
+        val serviceInstance = actuatorServiceFactory
+            .getServiceInstance(clientId, ActuatorService::class.java)
         val commonActuatorDtoFutures = listOf(
             ActuatorService::getProcessCpuUsage,
             ActuatorService::getSystemCpuUsage,
@@ -119,7 +128,7 @@ class ActuatorController(
             ActuatorService::getProcessUptime,
         ).map {
             threadPoolTaskExecutor.submit(
-                Callable<CommonActuatorDto?> {
+                Callable {
                     try {
                         it.invoke(serviceInstance)
                     } catch (e: Exception) {

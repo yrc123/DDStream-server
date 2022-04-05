@@ -1,6 +1,7 @@
 package com.yrc.ddstreamserver.service.feign
 
 import com.yrc.ddstreamserver.config.jwt.JwtRequestInterceptor
+import com.yrc.ddstreamserver.exception.common.EnumServerException
 import com.yrc.ddstreamserver.service.client.ClientService
 import feign.Client
 import feign.Feign
@@ -29,10 +30,10 @@ abstract class AbstractFeignClientFactory<T : Any>(
     @Resource(name = "trustAllClient")
     lateinit var client: Client
 
-    @Cacheable(value = ["ffmpeg-service"], key = "#id")
-    open fun getServiceInstance(id: String): T {
+    @Cacheable(value = ["ffmpeg-service"], key = "#id + '_' + #currentClass")
+    open fun getServiceInstance(id: String, currentClass: Class<T>): T {
         if (!clientService.clientContains(id)) {
-            TODO("抛出异常")
+            throw EnumServerException.CAN_NOT_CONNECT_TO_CLIENT.build()
         }
         return Feign.builder()
             .client(client)

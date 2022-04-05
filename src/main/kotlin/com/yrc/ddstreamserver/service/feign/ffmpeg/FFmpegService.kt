@@ -22,4 +22,6 @@ interface FFmpegService {
     @GetMapping("/api/client/ffmpeg/{id}")
     fun getFFmpegById(@PathVariable id: String): ResponseDto<FFmpegProcessDto>
 
+    @GetMapping("/api/client/ffmpeg/process/{name}")
+    fun getProcessByName(@PathVariable("name") name: String): ResponseDto<FFmpegProcessDto>
 }

@@ -31,43 +31,4 @@ interface ActuatorService {
 
     @GetMapping("/actuator/logfile")
     fun getLogFile(): String
-
-//    fun getDetail(threadPoolTaskExecutor: ThreadPoolTaskExecutor): DetailActuatorDto {
-//        val commonActuatorDtoFutures = listOf(
-//            this::getProcessCpuUsage,
-//            this::getSystemCpuUsage,
-//            this::getJvmMemoryMax,
-//            this::getJvmMemoryUsed,
-//            this::getProcessUptime,
-//        ).map {
-//            threadPoolTaskExecutor.submit(
-//                Callable<CommonActuatorDto?> {
-//                    try {
-//                        it.invoke()
-//                    } catch (e: Exception) {
-//                        e.printStackTrace()
-//                        null
-//                    }
-//                }
-//            )
-//        }
-//        val healthdtoFuture = threadPoolTaskExecutor.submit(
-//            Callable<HealthDto?> {
-//                try {
-//                    this.getHealth()
-//                } catch (e: Exception) {
-//                    e.printStackTrace()
-//                    null
-//                }
-//            }
-//        )
-//        return DetailActuatorDto(
-//            healthdtoFuture.get(),
-//            commonActuatorDtoFutures[0].get(),
-//            commonActuatorDtoFutures[1].get(),
-//            commonActuatorDtoFutures[2].get(),
-//            commonActuatorDtoFutures[3].get(),
-//            commonActuatorDtoFutures[4].get(),
-//        )
-//    }
 }
