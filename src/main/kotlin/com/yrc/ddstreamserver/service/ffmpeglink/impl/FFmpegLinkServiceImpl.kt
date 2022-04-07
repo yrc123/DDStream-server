@@ -65,11 +65,12 @@ class FFmpegLinkServiceImpl(
                     val instance = ffmpegServiceFactory.getServiceInstance(it.clientId!!,FFmpegService::class.java)
                     FFmpegLinkStatusDto(
                         it.clientId,
+                        it.ffmpegConfig?.name,
                         instance.getProcessByName(it.ffmpegConfig!!.name!!)
                             .data?.alive ?: false
                     )
                 } catch (e: Exception) {
-                    FFmpegLinkStatusDto(it.clientId, false, e.message)
+                    FFmpegLinkStatusDto(it.clientId, it.ffmpegConfig?.name, false, e.message)
                 }
             }
         }.map {
