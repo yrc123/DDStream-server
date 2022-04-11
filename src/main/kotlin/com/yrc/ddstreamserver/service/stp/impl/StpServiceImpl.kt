@@ -19,7 +19,7 @@ class StpServiceImpl(
             val roleIds = getRoleIdListByUserIdList(listOf(loginId))
             return getPermissionIdListByRoleIdList(roleIds).toMutableList()
         } else {
-            TODO("抛出异常")
+            throw Exception()
         }
     }
 
@@ -30,7 +30,7 @@ class StpServiceImpl(
                 .mapNotNull { it.id }
                 .toMutableList()
         } else {
-            TODO("抛出异常")
+            throw Exception()
         }
     }
 

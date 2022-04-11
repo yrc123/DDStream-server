@@ -1,5 +1,6 @@
 package com.yrc.ddstreamserver.config.jwt
 
+import com.yrc.common.exception.common.EnumCommonException
 import com.yrc.common.service.jwt.JwtService
 import feign.RequestInterceptor
 import feign.RequestTemplate
@@ -22,11 +23,11 @@ class JwtRequestInterceptor(
             "GET", "DELETE" -> {
                 request.path()
             }
-            "POST" -> {
+            "POST", "PATCH" -> {
                 String(request.body())
             }
             else -> {
-                TODO("抛出异常")
+                throw EnumCommonException.UNKNOWN_METHOD.build()
             }
         }
         val jws = jwtService.encode(data, 120 * 1000, issuer, time)

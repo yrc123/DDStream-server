@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1")
-//TODO: 添加校验
 class FFmpegController(
     private val ffmpegServiceFactory: FFmpegServiceFactory
 ) {
