@@ -29,12 +29,12 @@ class FFmpegLinkServiceImpl(
                         for (i in 1..5) {
                             val ffmpeg = instance.getProcessByName(it.ffmpegConfig!!.name!!).data
                             if (ffmpeg?.alive == true) {
-                                Thread.sleep(2000)
+                                Thread.sleep(5000)
                                 break
-                            } else if (i > 10) {
+                            } else if (i > 15) {
                                 return@forEach
                             }
-                            Thread.sleep(500)
+                            Thread.sleep(1000)
                         }
                     }
             }
