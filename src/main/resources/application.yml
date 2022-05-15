@@ -2,8 +2,7 @@ server:
   port: 7000
 spring:
   application:
-    name: ${DDSTREAM_CLIENT_APPLICATION_NAME:DDStream-server}
-  #????
+    name: ${DDSTREAM_SERVER_APPLICATION_NAME:DDStream-server}
   cloud:
     consul:
       port: 8500
@@ -14,15 +13,11 @@ spring:
   datasource:
     driver-class-name: org.h2.Driver
     username: ${DDSTREAM_CLIENT_DATABASE_USERNAME:sa}
-    url: jdbc:h2:./database/test
+    url: jdbc:h2:./database/ddstream-server
   h2:
     console:
       enabled: true
       path: /h2
-  sql:
-    init:
-#      mode: always
-#      data-locations: classpath:sql/init.sql
 management:
   endpoints:
     web:
@@ -31,3 +26,7 @@ management:
     endpoint:
       health:
         show-details: always
+dd-stream:
+  client:
+    application:
+      name: ${DDSTREAM_CLIENT_APPLICATION_NAME:DDStream-client}
