@@ -13,7 +13,7 @@ spring:
   datasource:
     driver-class-name: org.h2.Driver
     username: ${DDSTREAM_CLIENT_DATABASE_USERNAME:sa}
-    url: jdbc:h2:./database/test
+    url: jdbc:h2:./database/ddstream-server
   h2:
     console:
       enabled: true
